@@ -16,7 +16,11 @@ public class FixedThreadPool implements ThreadPool{
                 System.out.println("Thread executed");
             });
         }
-        fixedThreadPool.stop();
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException ignore) {
+//        }
+//        fixedThreadPool.stop();
     }
     private final int maxThreadCount;
     private final Deque<Runnable> queue;
@@ -42,11 +46,12 @@ public class FixedThreadPool implements ThreadPool{
 
                     Runnable task;
                     synchronized (queue) {
+
                         while (queue.isEmpty()) {
                             try {
                                 queue.wait();
-                            } catch (InterruptedException ignored) {
-
+                            } catch (InterruptedException e) {
+                                System.out.println("interrupted");
                             }
                         }
                         task = queue.pop();
