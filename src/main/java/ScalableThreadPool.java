@@ -11,8 +11,7 @@ public class ScalableThreadPool implements ThreadPool{
     public static void main(String[] args) {
         ScalableThreadPool threadPool = new ScalableThreadPool(2, 5);
 
-
-        for (int i = 0; i < 1; ++i) {
+        for (int i = 0; i < 10; ++i) {
             threadPool.execute(() -> {
                 try {
                     Thread.sleep(1000);
@@ -41,6 +40,7 @@ public class ScalableThreadPool implements ThreadPool{
     private Thread getStandardThread() {
 
         return new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " standart");
             while(true) {
                 Runnable task;
                 synchronized (taskQueue) {
@@ -62,6 +62,7 @@ public class ScalableThreadPool implements ThreadPool{
     private Thread getAuxiliaryThread() {
 
         return new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " auxiliary");
             while(true) {
                 Runnable task;
                 synchronized (taskQueue) {
@@ -88,6 +89,12 @@ public class ScalableThreadPool implements ThreadPool{
                 threadCount.increaseValue();
             }
             thread.start();
+            //если тут не подождать, то очередь задач всегда обрабатывается максимальным количеством потоков
+            try {
+                Thread.sleep(5);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         while (true) {

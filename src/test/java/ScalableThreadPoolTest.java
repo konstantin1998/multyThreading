@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 public class ScalableThreadPoolTest {
     @Test
     void testChecksTaskAreNotRunUntilStartMethodInvoked() {
+        //given
         Counter counter = new Counter();
 
         int minThreads = 3;
@@ -15,7 +16,9 @@ public class ScalableThreadPoolTest {
             Runnable task = counter::inc;
             pool.execute(task);
         }
+        //when
         int expectedCounterValue = 0;
+        //then
         assertEquals(expectedCounterValue, counter.getN());
     }
 }
