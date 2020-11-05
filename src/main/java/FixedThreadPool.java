@@ -3,10 +3,10 @@ import java.util.ArrayList;
 import java.util.Deque;
 
 public class FixedThreadPool implements ThreadPool{
+
     public static void main(String[] args) {
         FixedThreadPool fixedThreadPool = new FixedThreadPool(2);
 
-        fixedThreadPool.start();
         for (int i = 0; i < 10; ++i) {
             fixedThreadPool.execute(() -> {
                 try {
@@ -16,12 +16,9 @@ public class FixedThreadPool implements ThreadPool{
                 System.out.println("Thread executed");
             });
         }
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException ignore) {
-//        }
-//        fixedThreadPool.stop();
+        fixedThreadPool.start();
     }
+
     private final int maxThreadCount;
     private final Deque<Runnable> queue;
     private final ArrayList<Thread> threads;
@@ -46,16 +43,15 @@ public class FixedThreadPool implements ThreadPool{
 
                     Runnable task;
                     synchronized (queue) {
-
                         while (queue.isEmpty()) {
                             try {
                                 queue.wait();
-                            } catch (InterruptedException e) {
-                                System.out.println("interrupted");
+                            } catch (InterruptedException ignore) {
                             }
                         }
                         task = queue.pop();
                     }
+
                     task.run();
                 }
             });
