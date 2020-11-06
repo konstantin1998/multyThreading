@@ -36,6 +36,7 @@ public class FixedThreadPoolTest {
 
     @Test
     void testChecksTaskAreNotRunUntilStartMethodInvoked() {
+        //given
         Counter counter = new Counter();
 
         int numThreads = 3;
@@ -45,7 +46,9 @@ public class FixedThreadPoolTest {
             Runnable task = counter::inc;
             pool.execute(task);
         }
+        //when
         int expectedCounterValue = 0;
+        //then
         assertEquals(expectedCounterValue, counter.getN());
     }
 }
